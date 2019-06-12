@@ -207,7 +207,7 @@ In this mode, the blur effect will correctly merge all subitems without needing 
 image::misc/images/qt-qml-blur-animation.gif[Animate blur effect]
 
 It will be cool to animate blur instead of simply showing it instantly.
-Fortunately this can be achieved simply using QML `Behavior`s.
+Fortunately this can be achieved simply using QML `Behavior` s.
 
 [source, qml]
 ----
