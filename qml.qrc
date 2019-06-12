@@ -3,5 +3,7 @@
         <file>main.qml</file>
         <file>images/saee-park-flowers.jpg</file>
         <file>images/filband-mountains.jpg</file>
+        <file>images/filband-guy-smoking.jpg</file>
+        <file>images/filband-making-love.jpg</file>
     </qresource>
 </RCC>

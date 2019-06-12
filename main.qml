@@ -140,6 +140,7 @@ ApplicationWindow {
 
     }
 
+    // Blur single item
     Item {
         id: blurImagePage
         visible: false
@@ -178,12 +179,62 @@ ApplicationWindow {
         }
     }
 
+    // Blur an item and subitems
     Item {
         id: blurRectangleAndSubitemsPage
         visible: false
 
         Text {
-            text: qsTr("Blur rec and subitems page")
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: qsTr("In this effect we will blur a rectangle with all of its subitems.")
+        }
+
+        Button {
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: rectMultpleSubitems.top
+            text: qsTr("Toggle Blur")
+            onClicked: {
+                blurRectangleAndSubItems.visible = !blurRectangleAndSubItems.visible
+            }
+        }
+
+        Rectangle {
+            id: rectMultpleSubitems
+            anchors.centerIn: parent
+            width: 500
+            height: 300
+            color: "#aaa"
+
+            Row {
+                anchors.centerIn: parent
+                Image {
+                    id: imgFilbandGuySmoking
+                    width: 200
+                    fillMode: Image.PreserveAspectFit
+                    source: "qrc:/images/filband-guy-smoking.jpg"
+                }
+
+                Image {
+                    id: imgFilbandMakingLove
+                    width: 200
+                    fillMode: Image.PreserveAspectFit
+                    source: "qrc:/images/filband-making-love.jpg"
+                }
+            }
+
+            Text {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: qsTr("I am a text inside this rectangle!")
+            }
+        }
+
+        FastBlur
+        {
+            id: blurRectangleAndSubItems
+            visible: false
+            anchors.fill: rectMultpleSubitems
+            source: rectMultpleSubitems
+            radius: 85
         }
     }
 
