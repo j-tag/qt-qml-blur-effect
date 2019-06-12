@@ -45,7 +45,10 @@ ApplicationWindow {
                 id: toolButtonAnimateBlur
                 text: qsTr("Animate Blur")
 
-                onClicked: stack.replace(animateBlurPage)
+                onClicked: {
+                    stack.replace(animateBlurPage)
+                    timerBlurAnimation.start()
+                }
 
             }
 
@@ -238,12 +241,80 @@ ApplicationWindow {
         }
     }
 
+    // Animate a blur effect itself
     Item {
         id: animateBlurPage
         visible: false
 
-        Text {
-            text: qsTr("Animate blur page")
+        Timer {
+            id: timerBlurAnimation
+            running: false
+            interval: 2000
+            repeat: true
+
+            onTriggered: blurAnimationOverlay.opacity = blurAnimationOverlay.visible ? 0 : 1
+        }
+
+        Item {
+            id: blurAnimationPageMainContent
+            anchors.fill: parent
+
+            Image {
+                id: imgAnimatedBlurBackground
+                anchors.fill: parent
+                fillMode: Image.PreserveAspectCrop
+                source: "qrc:/images/filband-houses-from-far.jpg"
+            }
+
+            Rectangle {
+                anchors.centerIn: parent
+                radius: 5
+                color: "#dddddddd"
+                width: 200
+                height: 400
+
+                Column {
+                    spacing: 5
+                    anchors.centerIn: parent
+
+                    Text {
+                        text: qsTr("Wait to see blur")
+                    }
+
+                    Button {
+                        text: qsTr("Dummy")
+                    }
+
+                    CheckBox {
+                        text: qsTr("Dummy")
+                    }
+
+                    RadioButton {
+                        text: qsTr("Dummy")
+                    }
+                }
+
+            }
+
+        }
+
+        FastBlur
+        {
+            id: blurAnimationOverlay
+            opacity: 0
+            visible: opacity !== 0
+            anchors.fill: blurAnimationPageMainContent
+            source: blurAnimationPageMainContent
+            radius: 85
+
+            Behavior on opacity
+            {
+                NumberAnimation
+                {
+                    duration: 500
+                    easing.type: Easing.InOutQuad
+                }
+            }
         }
     }
 
