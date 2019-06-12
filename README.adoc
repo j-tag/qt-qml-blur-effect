@@ -1,64 +1,37 @@
-import QtQuick 2.12
-import QtQuick.Window 2.12
-import QtQuick.Controls 2.5
-import QtGraphicalEffects 1.0
+= Qt QML Blur Effect
+Hesam Gholami <hesamgholami@yahoo.com>
+v1.0, 2019-06-12
 
-ApplicationWindow {
-    visible: true
-    width: 640
-    height: 480
-    title: qsTr("Qt QML Blur Effect")
+++++
+<link rel="stylesheet"  href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.1.0/css/font-awesome.min.css">
+++++
+:icons: font
+:experimental: true
 
-    header: ToolBar
-    {
+image::misc/images/qt-qml-blur-animation.gif[Animate blur effect]
 
-        Row
-        {
+== Quick Start
 
-            ToolButton
-            {
-                id: toolButtonBlurBackground
-                text: qsTr("Blur Background")
+This project is created using Qt. So you need only to install Qt and then open up the project in _Qt Creator_ IDE.
 
-                onClicked: stack.replace(blurBackgroundPage)
-            }
+https://qt.io/download
 
-            ToolButton
-            {
-                id: toolButtonBlurImage
-                text: qsTr("Blur Image")
+== Blur Effects
 
-                onClicked: stack.replace(blurImagePage)
-            }
+In this project we have some different types of blur effect whih will be useful in different situations.
 
-            ToolButton
-            {
-                id: toolButtonBlurRectangleAndSubitems
-                text: qsTr("Blur Rectangle and Subitems")
+=== Display Content on Top of Blurred Area
 
-                onClicked: stack.replace(blurRectangleAndSubitemsPage)
+image::misc/images/qt-qml-blur-effect-content-on-top.png[Content on top of blur]
 
-            }
+This type of blur effect will be used to blur current content and then show something new on top of it to gather user interaction.
 
-            ToolButton
-            {
-                id: toolButtonAnimateBlur
-                text: qsTr("Animate Blur")
+This effect will provide a slick and smooth experience for users.
 
-                onClicked: {
-                    stack.replace(animateBlurPage)
-                    timerBlurAnimation.start()
-                }
-
-            }
-
-        }
-    }
-
-    // Blur background content
+[source, qml]
+----
     Item {
         id: blurBackgroundPage
-        visible: false
 
         // Main content that will be blurred
         Item {
@@ -67,21 +40,14 @@ ApplicationWindow {
 
             Image {
                 id: imgBackground
-                anchors.fill: parent
-                fillMode: Image.PreserveAspectCrop
-                source: "qrc:/images/saee-park-flowers.jpg"
+                // ...
             }
 
             Rectangle {
-                anchors.centerIn: parent
-                radius: 5
-                color: "#dddddddd"
-                width: 200
-                height: 100
+                // ...
 
                 Column {
-                    spacing: 5
-                    anchors.centerIn: parent
+                    // ...
 
                     Text {
                         text: qsTr("Hi")
@@ -90,6 +56,7 @@ ApplicationWindow {
                     Button {
                         text: qsTr("Blur")
                         onClicked: {
+                            // Here we will show blur effect
                             blurBackgroundOverlay.visible = true
                             blurPageOverlayContent.visible = true
                         }
@@ -116,11 +83,7 @@ ApplicationWindow {
             visible: false
 
             Rectangle {
-                anchors.centerIn: parent
-                radius: 5
-                color: "#dddddddd"
-                width: 400
-                height: 300
+                // ...
 
                 Column {
                     spacing: 5
@@ -133,6 +96,7 @@ ApplicationWindow {
                     Button {
                         text: qsTr("Close")
                         onClicked: {
+                            // Here we will discard blur effect
                             blurBackgroundOverlay.visible = false
                             blurPageOverlayContent.visible = false
                         }
@@ -143,26 +107,25 @@ ApplicationWindow {
         }
 
     }
+----
 
+=== Blur a Single Item
+
+image::misc/images/qt-qml-blur-effect-single-image.png[Blur single image]
+
+In this mode we will blur only a single element.
+
+[source, qml]
+----
     // Blur single item
     Item {
         id: blurImagePage
-        visible: false
-
-        Text {
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: buttonBlurToggleFilbandMountainsImage.top
-            text: qsTr("Blur only an image item")
-        }
 
         Button {
             id: buttonBlurToggleFilbandMountainsImage
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: imgFilbandMountainsWithSnow.top
+            // ...
             text: qsTr("Toggle Blur")
-            onClicked: {
-                blurImageFilbandMountains.visible = !blurImageFilbandMountains.visible
-            }
+            onClicked: blurImageFilbandMountains.visible = !blurImageFilbandMountains.visible
         }
 
         Image {
@@ -182,53 +145,48 @@ ApplicationWindow {
             radius: 85
         }
     }
+----
 
-    // Blur an item and subitems
+=== Blur an Item and Subitems
+
+image::misc/images/qt-qml-blur-effect-rect-and-subitems.png[Blur an item and its subitems]
+
+In this type of blur, we are going to blur a rectangle with all of its subitems.
+In this mode, the blur effect will correctly merge all subitems without needing of creating multiple blur effects for different items.
+
+[source, qml]
+----
     Item {
         id: blurRectangleAndSubitemsPage
-        visible: false
 
-        Text {
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: qsTr("In this effect we will blur a rectangle with all of its subitems.")
-        }
-
+        // ...
+        
         Button {
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: rectMultpleSubitems.top
+            // ...
             text: qsTr("Toggle Blur")
-            onClicked: {
-                blurRectangleAndSubItems.visible = !blurRectangleAndSubItems.visible
-            }
+            onClicked: blurRectangleAndSubItems.visible = !blurRectangleAndSubItems.visible
         }
 
         // This rectangle has multiple items which all of them will be blurred
         Rectangle {
             id: rectMultpleSubitems
-            anchors.centerIn: parent
-            width: 500
-            height: 300
-            color: "#aaa"
+            // ...
 
             Row {
                 anchors.centerIn: parent
                 Image {
                     id: imgFilbandGuySmoking
-                    width: 200
-                    fillMode: Image.PreserveAspectFit
-                    source: "qrc:/images/filband-guy-smoking.jpg"
+                    // ...
                 }
 
                 Image {
                     id: imgFilbandMakingLove
-                    width: 200
-                    fillMode: Image.PreserveAspectFit
-                    source: "qrc:/images/filband-making-love.jpg"
+                    // ...
                 }
             }
 
             Text {
-                anchors.horizontalCenter: parent.horizontalCenter
+                // ...
                 text: qsTr("I am a text inside this rectangle!")
             }
         }
@@ -242,15 +200,24 @@ ApplicationWindow {
             radius: 85
         }
     }
+----
 
-    // Animate a blur effect itself
+=== Animating Blur Effect
+
+image::misc/images/qt-qml-blur-animation.gif[Animate blur effect]
+
+It will be cool to animate blur instead of simple showing it instantly.
+Fortunately this can be achieved simply using QML `Behavior`s.
+
+[source, qml]
+----
     Item {
         id: animateBlurPage
-        visible: false
 
+        // Toggle animation every 2 seconds, so we can see it multiple times
         Timer {
             id: timerBlurAnimation
-            running: false
+            running: true
             interval: 2000
             repeat: true
 
@@ -263,17 +230,11 @@ ApplicationWindow {
 
             Image {
                 id: imgAnimatedBlurBackground
-                anchors.fill: parent
-                fillMode: Image.PreserveAspectCrop
-                source: "qrc:/images/filband-houses-from-far.jpg"
+                // ...
             }
 
             Rectangle {
-                anchors.centerIn: parent
-                radius: 5
-                color: "#dddddddd"
-                width: 200
-                height: 400
+                // ...
 
                 Column {
                     spacing: 5
@@ -309,6 +270,7 @@ ApplicationWindow {
             source: blurAnimationPageMainContent
             radius: 85
 
+            // This Behavior will let us to animate blur effect with its opacity
             Behavior on opacity
             {
                 NumberAnimation
@@ -319,13 +281,15 @@ ApplicationWindow {
             }
         }
     }
+----
 
 
-    StackView {
-        id: stack
-        initialItem: blurBackgroundPage
-        anchors.fill: parent
-    }
+== Contributing
 
+So that was it!
 
-}
+If you enjoyed this project, please consider contributing to it and make it better.
+
+And please don't forget to give a star to this project.
+
+Thank you and happy coding!
